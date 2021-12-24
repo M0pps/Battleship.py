@@ -1,0 +1,2835 @@
+import random
+# board state info
+possible_moves = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8",
+                     "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8",
+                     "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8",
+                     "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8",
+                     "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8",
+                     "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8",
+                     "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8",
+                     "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8",]
+player_board = [["", "A", "B", "C", "D", "E", "F", "G", "H"],
+                ["1", " ", " ", " ", " ", " ", " ", " ", " "],
+                ["2", " ", " ", " ", " ", " ", " ", " ", " "],
+                ["3", " ", " ", " ", " ", " ", " ", " ", " "],
+                ["4", " ", " ", " ", " ", " ", " ", " ", " "],
+                ["5", " ", " ", " ", " ", " ", " ", " ", " "],
+                ["6", " ", " ", " ", " ", " ", " ", " ", " "],
+                ["7", " ", " ", " ", " ", " ", " ", " ", " "],
+                ["8", " ", " ", " ", " ", " ", " ", " ", " "]]
+computer_board = [["", "A", "B", "C", "D", "E", "F", "G", "H"],
+                  ["1", " ", " ", " ", " ", " ", " ", " ", " "],
+                  ["2", " ", " ", " ", " ", " ", " ", " ", " "],
+                  ["3", " ", " ", " ", " ", " ", " ", " ", " "],
+                  ["4", " ", " ", " ", " ", " ", " ", " ", " "],
+                  ["5", " ", " ", " ", " ", " ", " ", " ", " "],
+                  ["6", " ", " ", " ", " ", " ", " ", " ", " "],
+                  ["7", " ", " ", " ", " ", " ", " ", " ", " "],
+                  ["8", " ", " ", " ", " ", " ", " ", " ", " "]]
+# computer ship creation
+ship_check = []
+carrier = []
+battleship = []
+cruiser = []
+submarine = []
+destroyer = []
+# player ship creation
+player_ship_check = []
+player_carrier = []
+player_battleship = []
+player_cruiser = []
+player_submarine = []
+player_destroyer = []
+player_string = []
+
+encrypt = {
+    "A1": 10,
+    "A2": 19,
+    "A3": 28,
+    "A4": 37,
+    "A5": 46,
+    "A6": 55,
+    "A7": 64,
+    "A8": 73,
+    "B1": 11,
+    "B2": 20,
+    "B3": 29,
+    "B4": 38,
+    "B5": 47,
+    "B6": 56,
+    "B7": 65,
+    "B8": 74,
+    "C1": 12,
+    "C2": 21,
+    "C3": 30,
+    "C4": 39,
+    "C5": 48,
+    "C6": 57,
+    "C7": 66,
+    "C8": 75,
+    "D1": 13,
+    "D2": 22,
+    "D3": 31,
+    "D4": 40,
+    "D5": 49,
+    "D6": 58,
+    "D7": 67,
+    "D8": 76,
+    "E1": 14,
+    "E2": 23,
+    "E3": 32,
+    "E4": 41,
+    "E5": 50,
+    "E6": 59,
+    "E7": 68,
+    "E8": 77,
+    "F1": 15,
+    "F2": 24,
+    "F3": 33,
+    "F4": 42,
+    "F5": 51,
+    "F6": 60,
+    "F7": 69,
+    "F8": 78,
+    "G1": 16,
+    "G2": 25,
+    "G3": 34,
+    "G4": 43,
+    "G5": 52,
+    "G6": 61,
+    "G7": 70,
+    "G8": 79,
+    "H1": 17,
+    "H2": 26,
+    "H3": 35,
+    "H4": 44,
+    "H5": 53,
+    "H6": 62,
+    "H7": 71,
+    "H8": 80
+}
+decrypt = {
+    10: "A1",
+    19: "A2",
+    28: "A3",
+    37: "A4",
+    46: "A5",
+    55: "A6",
+    64: "A7",
+    73: "A8",
+    11: "B1",
+    20: "B2",
+    29: "B3",
+    38: "B4",
+    47: "B5",
+    56: "B6",
+    65: "B7",
+    74: "B8",
+    12: "C1",
+    21: "C2",
+    30: "C3",
+    39: "C4",
+    48: "C5",
+    57: "C6",
+    66: "C7",
+    75: "C8",
+    13: "D1",
+    22: "D2",
+    31: "D3",
+    40: "D4",
+    49: "D5",
+    58: "D6",
+    67: "D7",
+    76: "D8",
+    14: "E1",
+    23: "E2",
+    32: "E3",
+    41: "E4",
+    50: "E5",
+    59: "E6",
+    68: "E7",
+    77: "E8",
+    15: "F1",
+    24: "F2",
+    33: "F3",
+    42: "F4",
+    51: "F5",
+    60: "F6",
+    69: "F7",
+    78: "F8",
+    16: "G1",
+    25: "G2",
+    34: "G3",
+    43: "G4",
+    52: "G5",
+    61: "G6",
+    70: "G7",
+    79: "G8",
+    17: "H1",
+    26: "H2",
+    35: "H3",
+    44: "H4",
+    53: "H5",
+    62: "H6",
+    71: "H7",
+    80: "H8"
+}
+
+
+def print_board():
+    print("Artifical Intellegence's Battlefield")
+    for rows in computer_board:
+        print(rows)
+    print("Your Battlefield")
+    for row in player_board:
+        print(row)
+
+
+def computer_choose():
+
+    def position(ship, val):
+        choose_row = random.randint(1, 8)
+
+        def calc_up_left():
+            choose_direction = random.randint(1, 2)
+            if choose_direction == 1:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] + 1)
+                    size += 1
+                    if size == val:
+                        finish = True
+            elif choose_direction == 2:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] + 9)
+                    size += 1
+                    if size == val:
+                        finish = True
+
+        def calc_up_right():
+            choose_direction = random.randint(2, 3)
+            if choose_direction == 3:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] - 1)
+                    size += 1
+                    if size == val:
+                        finish = True
+            elif choose_direction == 2:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] + 9)
+                    size += 1
+                    if size == val:
+                        finish = True
+
+        def calc_down_left():
+            choose_direction = random.randint(1, 2)
+            if choose_direction == 1:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] + 1)
+                    size += 1
+                    if size == val:
+                        finish = True
+            elif choose_direction == 2:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] - 9)
+                    size += 1
+                    if size == val:
+                        finish = True
+
+        def calc_down_right():
+            choose_direction = random.randint(2, 3)
+            if choose_direction == 3:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] - 1)
+                    size += 1
+                    if size == val:
+                        finish = True
+            elif choose_direction == 2:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] - 9)
+                    size += 1
+                    if size == val:
+                        finish = True
+
+        def row_choose():
+            if choose_row == 1:
+                row = random.randint(10, 17)
+                ship.append(row)
+                if row == 10 or row == 11 or row == 12 or row == 13:
+                    calc_up_left()
+                elif row == 14 or row == 15 or row == 16 or row == 17:
+                    calc_up_right()
+            elif choose_row == 2:
+                row = random.randint(19, 26)
+                ship.append(row)
+                if row == 19 or row == 20 or row == 21 or row == 22:
+                    calc_up_left()
+                elif row == 23 or row == 24 or row == 25 or row == 26:
+                    calc_up_right()
+            elif choose_row == 3:
+                row = random.randint(28, 35)
+                ship.append(row)
+                if row == 28 or row == 29 or row == 30 or row == 31:
+                    calc_up_left()
+                elif row == 32 or row == 33 or row == 34 or row == 35:
+                    calc_up_right()
+            elif choose_row == 4:
+                row = random.randint(37, 44)
+                ship.append(row)
+                if row == 37 or row == 38 or row == 39 or row == 40:
+                    calc_up_left()
+                elif row == 41 or row == 42 or row == 43 or row == 44:
+                    calc_up_right()
+            elif choose_row == 5:
+                row = random.randint(46, 53)
+                ship.append(row)
+                if row == 46 or row == 47 or row == 48 or row == 49:
+                    calc_down_left()
+                elif row == 50 or row == 51 or row == 52 or row == 53:
+                    calc_down_right()
+            elif choose_row == 6:
+                row = random.randint(55, 62)
+                ship.append(row)
+                if row == 55 or row == 56 or row == 57 or row == 58:
+                    calc_down_left()
+                elif row == 59 or row == 60 or row == 61 or row == 62:
+                    calc_down_right()
+            elif choose_row == 7:
+                row = random.randint(64, 71)
+                ship.append(row)
+                if row == 64 or row == 65 or row == 66 or row == 67:
+                    calc_down_left()
+                elif row == 68 or row == 69 or row == 70 or row == 71:
+                    calc_down_right()
+            elif choose_row == 8:
+                row = random.randint(73, 80)
+                ship.append(row)
+                if row == 73 or row == 74 or row == 75 or row == 76:
+                    calc_down_left()
+                elif row == 77 or row == 78 or row == 79 or row == 80:
+                    calc_down_right()
+
+        row_choose()
+
+    def check():
+        position(carrier, 5)
+        position(battleship, 4)
+        position(cruiser, 3)
+        position(submarine, 3)
+        position(destroyer, 2)
+
+
+    def clear():
+        carrier.clear()
+        battleship.clear()
+        cruiser.clear()
+        submarine.clear()
+        destroyer.clear()
+
+    def loop():
+        condition = False
+        while not condition:
+            clear()
+            check()
+            num = []
+            for val in carrier + battleship + cruiser + submarine + destroyer:
+                ship_check.append(val)
+            if (destroyer[-1] in ship_check[:-2]) or (destroyer[-2] in ship_check[:-2]):
+                num.append(1)
+            elif (submarine[-1] in (ship_check[0:12] + ship_check[-2:])) or (submarine[-2] in (ship_check[0:12] + ship_check[-2:])) or (submarine[-3] in (ship_check[0:12] + ship_check[-2:])):
+                num.append(1)
+            elif (cruiser[-1] in (ship_check[0:9] + ship_check[-5:])) or (cruiser[-2] in (ship_check[0:9] + ship_check[-5:])) or (cruiser[-3] in (ship_check[0:9] + ship_check[-5:])):
+                num.append(1)
+            elif (battleship[-1] in (ship_check[0:5] + ship_check[-8:])) or (battleship[-2] in (ship_check[0:5] + ship_check[-8:])) or (battleship[-3] in (ship_check[0:5] + ship_check[-8:])) or (battleship[-4] in (ship_check[0:5] + ship_check[-8:])):
+                num.append(1)
+            elif (carrier[-1] in (ship_check[5:])) or (carrier[-2] in (ship_check[5:])) or (carrier[-3] in (ship_check[5:])) or (carrier[-4] in (ship_check[5:])):
+                num.append(1)
+            else:
+                num.append(0)
+            if 0 in num:
+                condition = True
+                player_choose()
+            else:
+                num.clear()
+                ship_check.clear()
+    loop()
+
+
+def player_choose():
+    def board_update(ship):
+        if encrypt[ship[-1]] == 10:
+            player_board[1][1] = "■"
+        if encrypt[ship[-1]] == 19:
+            player_board[2][1] = "■"
+        if encrypt[ship[-1]] == 28:
+            player_board[3][1] = "■"
+        if encrypt[ship[-1]] == 37:
+            player_board[4][1] = "■"
+        if encrypt[ship[-1]] == 46:
+            player_board[5][1] = "■"
+        if encrypt[ship[-1]] == 55:
+            player_board[6][1] = "■"
+        if encrypt[ship[-1]] == 64:
+            player_board[7][1] = "■"
+        if encrypt[ship[-1]] == 73:
+            player_board[8][1] = "■"
+
+        if encrypt[ship[-1]] == 11:
+            player_board[1][2] = "■"
+        if encrypt[ship[-1]] == 20:
+            player_board[2][2] = "■"
+        if encrypt[ship[-1]] == 29:
+            player_board[3][2] = "■"
+        if encrypt[ship[-1]] == 38:
+            player_board[4][2] = "■"
+        if encrypt[ship[-1]] == 47:
+            player_board[5][2] = "■"
+        if encrypt[ship[-1]] == 56:
+            player_board[6][2] = "■"
+        if encrypt[ship[-1]] == 65:
+            player_board[7][2] = "■"
+        if encrypt[ship[-1]] == 74:
+            player_board[8][2] = "■"
+
+        if encrypt[ship[-1]] == 12:
+            player_board[1][3] = "■"
+        if encrypt[ship[-1]] == 21:
+            player_board[2][3] = "■"
+        if encrypt[ship[-1]] == 30:
+            player_board[3][3] = "■"
+        if encrypt[ship[-1]] == 39:
+            player_board[4][3] = "■"
+        if encrypt[ship[-1]] == 48:
+            player_board[5][3] = "■"
+        if encrypt[ship[-1]] == 57:
+            player_board[6][3] = "■"
+        if encrypt[ship[-1]] == 66:
+            player_board[7][3] = "■"
+        if encrypt[ship[-1]] == 75:
+            player_board[8][3] = "■"
+
+        if encrypt[ship[-1]] == 13:
+            player_board[1][4] = "■"
+        if encrypt[ship[-1]] == 22:
+            player_board[2][4] = "■"
+        if encrypt[ship[-1]] == 31:
+            player_board[3][4] = "■"
+        if encrypt[ship[-1]] == 40:
+            player_board[4][4] = "■"
+        if encrypt[ship[-1]] == 49:
+            player_board[5][4] = "■"
+        if encrypt[ship[-1]] == 58:
+            player_board[6][4] = "■"
+        if encrypt[ship[-1]] == 67:
+            player_board[7][4] = "■"
+        if encrypt[ship[-1]] == 76:
+            player_board[8][4] = "■"
+
+        if encrypt[ship[-1]] == 14:
+            player_board[1][5] = "■"
+        if encrypt[ship[-1]] == 23:
+            player_board[2][5] = "■"
+        if encrypt[ship[-1]] == 32:
+            player_board[3][5] = "■"
+        if encrypt[ship[-1]] == 41:
+            player_board[4][5] = "■"
+        if encrypt[ship[-1]] == 50:
+            player_board[5][5] = "■"
+        if encrypt[ship[-1]] == 59:
+            player_board[6][5] = "■"
+        if encrypt[ship[-1]] == 68:
+            player_board[7][5] = "■"
+        if encrypt[ship[-1]] == 77:
+            player_board[8][5] = "■"
+
+        if encrypt[ship[-1]] == 15:
+            player_board[1][6] = "■"
+        if encrypt[ship[-1]] == 24:
+            player_board[2][6] = "■"
+        if encrypt[ship[-1]] == 33:
+            player_board[3][6] = "■"
+        if encrypt[ship[-1]] == 42:
+            player_board[4][6] = "■"
+        if encrypt[ship[-1]] == 51:
+            player_board[5][6] = "■"
+        if encrypt[ship[-1]] == 60:
+            player_board[6][6] = "■"
+        if encrypt[ship[-1]] == 69:
+            player_board[7][6] = "■"
+        if encrypt[ship[-1]] == 78:
+            player_board[8][6] = "■"
+
+        if encrypt[ship[-1]] == 16:
+            player_board[1][7] = "■"
+        if encrypt[ship[-1]] == 25:
+            player_board[2][7] = "■"
+        if encrypt[ship[-1]] == 34:
+            player_board[3][7] = "■"
+        if encrypt[ship[-1]] == 43:
+            player_board[4][7] = "■"
+        if encrypt[ship[-1]] == 52:
+            player_board[5][7] = "■"
+        if encrypt[ship[-1]] == 61:
+            player_board[6][7] = "■"
+        if encrypt[ship[-1]] == 70:
+            player_board[7][7] = "■"
+        if encrypt[ship[-1]] == 79:
+            player_board[8][7] = "■"
+
+        if encrypt[ship[-1]] == 17:
+            player_board[1][8] = "■"
+        if encrypt[ship[-1]] == 26:
+            player_board[2][8] = "■"
+        if encrypt[ship[-1]] == 35:
+            player_board[3][8] = "■"
+        if encrypt[ship[-1]] == 44:
+            player_board[4][8] = "■"
+        if encrypt[ship[-1]] == 53:
+            player_board[5][8] = "■"
+        if encrypt[ship[-1]] == 62:
+            player_board[6][8] = "■"
+        if encrypt[ship[-1]] == 71:
+            player_board[7][8] = "■"
+        if encrypt[ship[-1]] == 80:
+            player_board[8][8] = "■"
+
+    def clear_board():
+        player_board[1][1] = " "
+        player_board[2][1] = " "
+        player_board[3][1] = " "
+        player_board[4][1] = " "
+        player_board[5][1] = " "
+        player_board[6][1] = " "
+        player_board[7][1] = " "
+        player_board[8][1] = " "
+        player_board[1][2] = " "
+        player_board[2][2] = " "
+        player_board[3][2] = " "
+        player_board[4][2] = " "
+        player_board[5][2] = " "
+        player_board[6][2] = " "
+        player_board[7][2] = " "
+        player_board[8][2] = " "
+        player_board[1][3] = " "
+        player_board[2][3] = " "
+        player_board[3][3] = " "
+        player_board[4][3] = " "
+        player_board[5][3] = " "
+        player_board[6][3] = " "
+        player_board[7][3] = " "
+        player_board[8][3] = " "
+        player_board[1][4] = " "
+        player_board[2][4] = " "
+        player_board[3][4] = " "
+        player_board[4][4] = " "
+        player_board[5][4] = " "
+        player_board[6][4] = " "
+        player_board[7][4] = " "
+        player_board[8][4] = " "
+        player_board[1][5] = " "
+        player_board[2][5] = " "
+        player_board[3][5] = " "
+        player_board[4][5] = " "
+        player_board[5][5] = " "
+        player_board[6][5] = " "
+        player_board[7][5] = " "
+        player_board[8][5] = " "
+        player_board[1][6] = " "
+        player_board[2][6] = " "
+        player_board[3][6] = " "
+        player_board[4][6] = " "
+        player_board[5][6] = " "
+        player_board[6][6] = " "
+        player_board[7][6] = " "
+        player_board[8][6] = " "
+        player_board[1][7] = " "
+        player_board[2][7] = " "
+        player_board[3][7] = " "
+        player_board[4][7] = " "
+        player_board[5][7] = " "
+        player_board[6][7] = " "
+        player_board[7][7] = " "
+        player_board[8][7] = " "
+        player_board[1][8] = " "
+        player_board[2][8] = " "
+        player_board[3][8] = " "
+        player_board[4][8] = " "
+        player_board[5][8] = " "
+        player_board[6][8] = " "
+        player_board[7][8] = " "
+        player_board[8][8] = " "
+
+    def player_position(ship, val):
+
+        def calc_up_left():
+            choose_orientation = input("Input Ship Orientation (East) or (South):").upper()
+            if choose_orientation.startswith("E"):
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] + 1)
+                    size += 1
+                    if size == val:
+                        finish = True
+            else:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] + 9)
+                    size += 1
+                    if size == val:
+                        finish = True
+            for num in ship:
+                player_string.append(decrypt[num])
+                board_update(player_string)
+                player_string.clear()
+            print_board()
+
+        def calc_up_right():
+            choose_orientation = input("Input Ship Orientation (West) or (South):").upper()
+            if choose_orientation.startswith("W"):
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] - 1)
+                    size += 1
+                    if size == val:
+                        finish = True
+            else:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] + 9)
+                    size += 1
+                    if size == val:
+                        finish = True
+            for num in ship:
+                player_string.append(decrypt[num])
+                board_update(player_string)
+                player_string.clear()
+            print_board()
+
+        def calc_down_left():
+            choose_orientation = input("Input Ship Orientation (East) or (North):").upper()
+            if choose_orientation.startswith("E"):
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] + 1)
+                    size += 1
+                    if size == val:
+                        finish = True
+            else:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] - 9)
+                    size += 1
+                    if size == val:
+                        finish = True
+            for num in ship:
+                player_string.append(decrypt[num])
+                board_update(player_string)
+                player_string.clear()
+            print_board()
+
+        def calc_down_right():
+            choose_orientation = input("Input Ship Orientation (West) or (North):").upper()
+            if choose_orientation.startswith("W"):
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] - 1)
+                    size += 1
+                    if size == val:
+                        finish = True
+            else:
+                finish = False
+                size = 1
+                while not finish:
+                    ship.append(ship[-1] - 9)
+                    size += 1
+                    if size == val:
+                        finish = True
+            for num in ship:
+                player_string.append(decrypt[num])
+                board_update(player_string)
+                player_string.clear()
+            print_board()
+
+        def row_choose():
+            choose_initial = input("Input Initial Ship Position:").upper()
+            encrypt_initial = encrypt[choose_initial]
+            ship.append(encrypt_initial)
+            if encrypt_initial == 10 or encrypt_initial == 11 or encrypt_initial == 12 or encrypt_initial == 13:
+                calc_up_left()
+            elif encrypt_initial == 14 or encrypt_initial == 15 or encrypt_initial == 16 or encrypt_initial == 17:
+                calc_up_right()
+            elif encrypt_initial == 19 or encrypt_initial == 20 or encrypt_initial == 21 or encrypt_initial == 22:
+                calc_up_left()
+            elif encrypt_initial == 23 or encrypt_initial == 24 or encrypt_initial == 25 or encrypt_initial == 26:
+                calc_up_right()
+            elif encrypt_initial == 28 or encrypt_initial == 29 or encrypt_initial == 30 or encrypt_initial == 31:
+                calc_up_left()
+            elif encrypt_initial == 32 or encrypt_initial == 33 or encrypt_initial == 34 or encrypt_initial == 35:
+                calc_up_right()
+            elif encrypt_initial == 37 or encrypt_initial == 38 or encrypt_initial == 39 or encrypt_initial == 40:
+                calc_up_left()
+            elif encrypt_initial == 41 or encrypt_initial == 42 or encrypt_initial == 43 or encrypt_initial == 44:
+                calc_up_right()
+            elif encrypt_initial == 46 or encrypt_initial == 47 or encrypt_initial == 48 or encrypt_initial == 49:
+                calc_down_left()
+            elif encrypt_initial == 50 or encrypt_initial == 51 or encrypt_initial == 52 or encrypt_initial == 53:
+                calc_down_right()
+            elif encrypt_initial == 55 or encrypt_initial == 56 or encrypt_initial == 57 or encrypt_initial == 58:
+                calc_down_left()
+            elif encrypt_initial == 59 or encrypt_initial == 60 or encrypt_initial == 61 or encrypt_initial == 62:
+                calc_down_right()
+            elif encrypt_initial == 64 or encrypt_initial == 65 or encrypt_initial == 66 or encrypt_initial == 67:
+                calc_down_left()
+            elif encrypt_initial == 68 or encrypt_initial == 69 or encrypt_initial == 70 or encrypt_initial == 71:
+                calc_down_right()
+            elif encrypt_initial == 73 or encrypt_initial == 74 or encrypt_initial == 75 or encrypt_initial == 76:
+                calc_down_left()
+            elif encrypt_initial == 77 or encrypt_initial == 78 or encrypt_initial == 79 or encrypt_initial == 80:
+                calc_down_right()
+
+        row_choose()
+
+    def player_check():
+        print_board()
+        print("[Carrier] Length: 5 Tiles")
+        player_position(player_carrier, 5)
+        print("[Battleship] Length: 4 Tiles")
+        player_position(player_battleship, 4)
+        print("[Cruiser] Length: 3 Tiles")
+        player_position(player_cruiser, 3)
+        print("[Submarine] Length: 3 Tiles")
+        player_position(player_submarine, 3)
+        print("[Destroyer] Length: 2 Tiles")
+        player_position(player_destroyer, 2)
+
+
+    def place_ship(ship):
+        for num in ship:
+            player_string.append(decrypt[num])
+            board_update(player_string)
+            player_string.clear()
+
+    def loop():
+        player_check()
+        condition = False
+        while not condition:
+            num = []
+            for val in player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer:
+                player_ship_check.append(val)
+            if (player_destroyer[-1] in player_ship_check[:-2]) or (player_destroyer[-2] in player_ship_check[:-2]):
+                num.append(1)
+                player_destroyer.clear()
+                player_ship_check.clear()
+                clear_board()
+                place_ship(player_carrier)
+                place_ship(player_battleship)
+                place_ship(player_cruiser)
+                place_ship(player_submarine)
+                player_position(player_destroyer, 2)
+            elif (player_submarine[-1] in (player_ship_check[0:12] + player_ship_check[-2:])) or (
+                    player_submarine[-2] in (player_ship_check[0:12] + player_ship_check[-2:])) or (
+                    player_submarine[-3] in (player_ship_check[0:12] + player_ship_check[-2:])):
+                num.append(1)
+                player_submarine.clear()
+                player_ship_check.clear()
+                clear_board()
+                place_ship(player_carrier)
+                place_ship(player_battleship)
+                place_ship(player_cruiser)
+                place_ship(player_destroyer)
+                player_position(player_submarine, 3)
+            elif (player_cruiser[-1] in (player_ship_check[0:9] + player_ship_check[-5:])) or (
+                    player_cruiser[-2] in (player_ship_check[0:9] + player_ship_check[-5:])) or (
+                    player_cruiser[-3] in (player_ship_check[0:9] + player_ship_check[-5:])):
+                num.append(1)
+                player_cruiser.clear()
+                player_ship_check.clear()
+                clear_board()
+                place_ship(player_carrier)
+                place_ship(player_battleship)
+                place_ship(player_submarine)
+                place_ship(player_destroyer)
+                player_position(player_cruiser, 3)
+            elif (player_battleship[-1] in (player_ship_check[0:5] + player_ship_check[-8:])) or (
+                    player_battleship[-2] in (player_ship_check[0:5] + player_ship_check[-8:])) or (
+                    player_battleship[-3] in (player_ship_check[0:5] + player_ship_check[-8:])) or (
+                    player_battleship[-4] in (player_ship_check[0:5] + player_ship_check[-8:])):
+                num.append(1)
+                player_battleship.clear()
+                player_ship_check.clear()
+                clear_board()
+                place_ship(player_carrier)
+                place_ship(player_cruiser)
+                place_ship(player_submarine)
+                place_ship(player_destroyer)
+                player_position(player_battleship, 4)
+            elif (player_carrier[-1] in (player_ship_check[5:])) or (player_carrier[-2] in (player_ship_check[5:])) or (
+                    player_carrier[-3] in (player_ship_check[5:])) or (player_carrier[-4] in (player_ship_check[5:])):
+                num.append(1)
+                player_carrier.clear()
+                player_ship_check.clear()
+                clear_board()
+                place_ship(player_battleship)
+                place_ship(player_cruiser)
+                place_ship(player_submarine)
+                place_ship(player_destroyer)
+                player_position(player_carrier, 5)
+            else:
+                num.append(0)
+                condition = True
+                start()
+
+    loop()
+
+
+def end():
+    print("END")
+
+
+def start():
+    win = False
+    player_moves = []
+    encrypted_player_moves = []
+    computer_moves = []
+    hit_computer_moves = []
+    target_ship = ["FALSE"]
+
+    sunk_player_carrier = ["FALSE"]
+    sunk_player_battleship = ["FALSE"]
+    sunk_player_cruiser = ["FALSE"]
+    sunk_player_submarine = ["FALSE"]
+    sunk_player_destroyer = ["FALSE"]
+
+    sunk_computer_carrier = ["FALSE"]
+    sunk_computer_battleship = ["FALSE"]
+    sunk_computer_cruiser = ["FALSE"]
+    sunk_computer_submarine = ["FALSE"]
+    sunk_computer_destroyer = ["FALSE"]
+
+
+    def board_update():
+        if encrypted_player_moves[-1] == 10:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[1][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[1][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 19:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[2][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[2][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 28:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[3][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[3][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 37:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[4][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[4][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 46:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[5][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[5][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 55:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[6][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[6][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 64:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[7][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[7][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 73:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[8][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[8][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 11:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[1][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[1][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 20:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[2][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[2][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 29:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[3][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[3][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 38:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[4][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[4][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 47:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[5][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[5][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 56:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[6][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[6][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 65:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[7][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[7][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 74:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[8][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[8][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 12:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[1][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[1][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 21:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[2][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[2][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 30:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[3][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[3][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 39:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[4][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[4][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 48:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[5][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[5][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 57:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[6][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[6][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 66:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[7][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[7][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 75:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[8][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[8][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 13:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[1][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[1][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 22:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[2][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[2][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 31:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[3][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[3][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 40:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[4][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[4][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 49:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[5][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[5][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 58:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[6][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[6][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 67:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[7][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[7][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 76:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[8][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[8][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 14:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[1][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[1][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 23:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[2][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[2][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 32:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[3][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[3][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 41:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[4][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[4][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 50:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[5][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[5][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 59:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[6][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[6][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 68:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[7][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[7][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 77:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[8][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[8][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 15:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[1][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[1][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 24:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[2][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[2][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 33:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[3][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[3][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 42:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[4][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[4][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 51:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[5][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[5][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 60:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[6][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[6][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 69:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[7][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[7][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 78:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[8][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[8][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 16:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[1][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[1][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 25:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[2][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[2][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 34:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[3][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[3][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 43:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[4][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[4][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 52:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[5][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[5][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 61:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[6][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[6][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 70:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[7][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[7][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 79:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[8][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[8][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 17:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[1][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[1][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 26:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[2][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[2][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 35:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[3][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[3][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 44:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[4][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[4][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 53:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[5][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[5][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 62:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[6][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[6][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 71:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[7][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[7][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif encrypted_player_moves[-1] == 80:
+            if encrypted_player_moves[-1] in (carrier + battleship + cruiser + submarine + destroyer):
+                computer_board[8][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                computer_board[8][8] = "O"
+                print_board()
+                print("[Miss]")
+
+    def check_computer_carrier():
+        size = 0
+        for val in encrypted_player_moves:
+            if val in carrier:
+                size += 1
+        if size == 5:
+            print("Artificial Intelligence: 'You sunk my carrier!'")
+            sunk_computer_carrier.clear()
+            sunk_computer_carrier.append("TRUE")
+
+    def check_computer_battleship():
+        size = 0
+        for val in encrypted_player_moves:
+            if val in battleship:
+                size += 1
+        if size == 4:
+            print("Artificial Intelligence: 'You sunk my battleship!'")
+            sunk_computer_battleship.clear()
+            sunk_computer_battleship.append("TRUE")
+
+    def check_computer_cruiser():
+        size = 0
+        for val in encrypted_player_moves:
+            if val in cruiser:
+                size += 1
+        if size == 3:
+            print("Artificial Intelligence: 'You sunk my cruiser!'")
+            sunk_computer_cruiser.clear()
+            sunk_computer_cruiser.append("TRUE")
+
+    def check_computer_submarine():
+        size = 0
+        for val in encrypted_player_moves:
+            if val in submarine:
+                size += 1
+        if size == 3:
+            print("Artificial Intelligence: 'You sunk my submarine!'")
+            sunk_computer_submarine.clear()
+            sunk_computer_submarine.append("TRUE")
+
+    def check_computer_destroyer():
+        size = 0
+        for val in encrypted_player_moves:
+            if val in destroyer:
+                size += 1
+        if size == 2:
+            print("Artificial Intelligence: 'You sunk my destroyer!'")
+            sunk_computer_destroyer.clear()
+            sunk_computer_destroyer.append("TRUE")
+
+    def player_board_update():
+        if computer_moves[-1] == 10:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[1][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[1][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 19:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[2][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[2][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 28:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[3][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[3][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 37:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[4][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[4][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 46:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[5][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[5][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 55:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[6][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[6][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 64:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[7][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[7][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 73:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[8][1] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[8][1] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 11:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[1][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[1][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 20:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[2][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[2][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 29:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[3][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[3][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 38:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[4][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[4][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 47:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[5][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[5][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 56:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[6][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[6][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 65:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[7][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[7][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 74:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[8][2] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[8][2] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 12:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[1][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[1][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 21:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[2][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[2][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 30:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[3][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[3][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 39:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[4][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[4][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 48:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[5][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[5][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 57:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[6][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[6][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 66:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[7][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[7][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 75:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[8][3] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[8][3] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 13:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[1][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[1][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 22:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[2][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[2][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 31:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[3][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[3][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 40:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[4][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[4][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 49:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[5][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[5][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 58:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[6][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[6][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 67:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[7][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[7][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 76:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[8][4] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[8][4] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 14:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[1][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[1][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 23:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[2][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[2][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 32:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[3][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[3][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 41:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[4][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[4][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 50:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[5][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[5][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 59:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[6][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[6][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 68:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[7][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[7][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 77:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[8][5] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[8][5] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 15:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[1][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[1][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 24:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[2][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[2][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 33:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[3][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[3][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 42:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[4][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[4][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 51:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[5][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[5][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 60:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[6][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[6][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 69:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[7][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[7][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 78:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[8][6] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[8][6] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 16:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[1][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[1][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 25:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[2][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[2][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 34:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[3][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[3][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 43:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[4][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[4][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 52:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[5][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[5][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 61:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[6][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[6][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 70:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[7][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[7][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 79:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[8][7] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[8][7] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 17:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[1][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[1][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 26:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[2][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[2][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 35:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[3][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[3][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 44:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[4][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[4][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 53:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[5][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[5][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 62:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[6][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[6][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 71:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[7][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[7][8] = "O"
+                print_board()
+                print("[Miss]")
+        elif computer_moves[-1] == 80:
+            if computer_moves[-1] in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                player_board[8][8] = "X"
+                print("[Hit]")
+                print_board()
+            else:
+                player_board[8][8] = "O"
+                print_board()
+                print("[Miss]")
+
+    def hit_player_carrier():
+        size = 0
+        for val in hit_computer_moves:
+            if val in player_carrier:
+                size += 1
+        if size == 5:
+            print("Your carrier was sunk!")
+            hit_computer_moves.clear()
+            target_ship.append("FALSE")
+            sunk_computer_carrier.clear()
+            sunk_computer_carrier.append("TRUE")
+            print("SWITCH TO HUNT MODE")
+
+    def hit_player_battleship():
+        size = 0
+        for val in hit_computer_moves:
+            if val in player_battleship:
+                size += 1
+        if size == 4:
+            print("Your battleship was sunk")
+            hit_computer_moves.clear()
+            target_ship.append("FALSE")
+            sunk_computer_battleship.clear()
+            sunk_computer_battleship.append("TRUE")
+            print("SWITCH TO HUNT MODE")
+
+
+    def hit_player_cruiser():
+        size = 0
+        for val in hit_computer_moves:
+            if val in player_cruiser:
+                size += 1
+        if size == 3:
+            print("Your cruiser was sunk!")
+            hit_computer_moves.clear()
+            target_ship.append("FALSE")
+            sunk_computer_cruiser.clear()
+            sunk_computer_cruiser.append("TRUE")
+            print("SWITCH TO HUNT MODE")
+
+
+    def hit_player_submarine():
+        size = 0
+        for val in hit_computer_moves:
+            if val in player_submarine:
+                size += 1
+        if size == 3:
+            print("Your submarine was sunk!")
+            hit_computer_moves.clear()
+            target_ship.append("FALSE")
+            sunk_computer_submarine.clear()
+            sunk_computer_submarine.append("TRUE")
+            print("SWITCH TO HUNT MODE")
+
+
+    def hit_player_destroyer():
+        size = 0
+        for val in hit_computer_moves:
+            if val in player_destroyer:
+                size += 1
+        if size == 2:
+            print("Your destroyer was sunk!")
+            hit_computer_moves.clear()
+            target_ship.append("FALSE")
+            sunk_computer_destroyer.clear()
+            sunk_computer_destroyer.append("TRUE")
+            print("SWITCH TO HUNT MODE")
+
+
+    def hunt():
+        loop = False
+        while not loop:
+            num = random.randint(10, 80)
+            if num != 18 and num != 27 and num != 36 and num != 45 and num != 54 and num != 63 and num != 72:
+                if num not in computer_moves:
+                    if num % 2 > 0:
+                        if num in (
+                                player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                            hit_computer_moves.append(num)
+                            target_ship.append("TRUE")
+                            print("SWITCH TO TARGET MODE")
+                        computer_moves.append(num)
+                        loop = True
+
+    def target():
+        loop = False
+        while not loop:
+            length = len(hit_computer_moves)
+            # fix the problem where the computer targets one of the outside/edge areas of the map and doesnt hit an actual attackable area.
+            if length == 1:
+                num = random.randint(1, 4)
+                if num == 1:
+                    move = hit_computer_moves[0] - 9
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            else:
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                elif num == 2:
+                    move = hit_computer_moves[0] + 1
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            else:
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                elif num == 3:
+                    move = hit_computer_moves[0] + 9
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            else:
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                else:
+                    move = hit_computer_moves[0] - 1
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            else:
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+            elif length == 2:
+                if hit_computer_moves[0] - hit_computer_moves[1] == 1:
+                    move = hit_computer_moves[-1] - 1
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] + 1
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] + 1
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[0] - hit_computer_moves[1] == -1:
+                    move = hit_computer_moves[-1] + 1
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] - 1
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] - 1
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[0] - hit_computer_moves[1] == 9:
+                    move = hit_computer_moves[-1] - 9
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] + 9
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] + 9
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[0] - hit_computer_moves[1] == -9:
+                    move = hit_computer_moves[-1] + 9
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] - 9
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] - 9
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+            elif length == 3:
+                if hit_computer_moves[-2] - hit_computer_moves[-1] == 1:
+                    move = hit_computer_moves[-1] - 1
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] + 1
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] + 1
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[-2] - hit_computer_moves[-1] == -1:
+                    move = hit_computer_moves[-1] + 1
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] - 1
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] - 1
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[-2] - hit_computer_moves[-1] == 9:
+                    move = hit_computer_moves[-1] - 9
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] + 9
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] + 9
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[-2] - hit_computer_moves[-1] == -9:
+                    move = hit_computer_moves[-1] + 9
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] - 9
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] - 9
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+            elif length == 4:
+                if hit_computer_moves[-2] - hit_computer_moves[-1] == 1:
+                    move = hit_computer_moves[-1] - 1
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] + 1
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] + 1
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[-2] - hit_computer_moves[-1] == -1:
+                    move = hit_computer_moves[-1] + 1
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] - 1
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] - 1
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[-2] - hit_computer_moves[-1] == 9:
+                    move = hit_computer_moves[-1] - 9
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] + 9
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] + 9
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[-2] - hit_computer_moves[-1] == -9:
+                    move = hit_computer_moves[-1] + 9
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] - 9
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] - 9
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+            elif length == 5:
+                if hit_computer_moves[-2] - hit_computer_moves[-1] == 1:
+                    move = hit_computer_moves[-1] - 1
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] + 1
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] + 1
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[-2] - hit_computer_moves[-1] == -1:
+                    move = hit_computer_moves[-1] + 1
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] - 1
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] - 1
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[-2] - hit_computer_moves[-1] == 9:
+                    move = hit_computer_moves[-1] - 9
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] + 9
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] + 9
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+                elif hit_computer_moves[-2] - hit_computer_moves[-1] == -9:
+                    move = hit_computer_moves[-1] + 9
+                    if move not in computer_moves:
+                        if move != 18 and move != 27 and move != 36 and move != 45 and move != 54 and move != 63 and move != 72:
+                            if move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                loop = True
+                            elif move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(move)
+                                hit_computer_moves.append(move)
+                                loop = True
+                        elif move == 18 and move == 27 and move == 36 and move == 45 and move == 54 and move == 63 and move == 72:
+                            actual_move = hit_computer_moves[0] - 9
+                            if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                                if actual_move not in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    loop = True
+                                elif actual_move in (
+                                        player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                    computer_moves.append(actual_move)
+                                    hit_computer_moves.append(actual_move)
+                                    loop = True
+                    else:
+                        actual_move = hit_computer_moves[0] - 9
+                        if actual_move != 18 and actual_move != 27 and actual_move != 36 and actual_move != 45 and actual_move != 54 and actual_move != 63 and actual_move != 72:
+                            if actual_move not in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                loop = True
+                            elif actual_move in (
+                                    player_carrier + player_battleship + player_cruiser + player_submarine + player_destroyer):
+                                computer_moves.append(actual_move)
+                                hit_computer_moves.append(actual_move)
+                                loop = True
+
+    def player_win():
+        size = 0
+        for val in encrypted_player_moves:
+            if val in (submarine + destroyer + cruiser + battleship + carrier):
+                size += 1
+        if size == 17:
+            print("You Win")
+            end()
+
+    def lose_check():
+        size = 0
+        for val in computer_moves:
+            if val in (player_submarine + player_destroyer + player_cruiser + player_battleship + player_carrier):
+                size += 1
+        if size == 17:
+            print("You Lose")
+            end()
+    while not win:
+        check = 0
+        player_move = input("Input: ").upper()
+        if player_move not in possible_moves:
+            print("Invalid Attack")
+        else:
+            if player_move in player_moves:
+                print("Already Attacked")
+            else:
+                player_moves.append(player_move)
+                encrypted_player_moves.append(encrypt[player_move])
+                board_update()
+                if "TRUE" not in sunk_computer_carrier[0]:
+                    check_computer_carrier()
+                if "TRUE" not in sunk_computer_battleship[0]:
+                    check_computer_battleship()
+                if "TRUE" not in sunk_computer_cruiser[0]:
+                    check_computer_cruiser()
+                if "TRUE" not in sunk_computer_submarine[0]:
+                    check_computer_submarine()
+                if "TRUE" not in sunk_computer_destroyer[0]:
+                    check_computer_destroyer()
+
+                player_win()
+
+
+                if "FALSE" in target_ship[-1]:
+                    hunt()
+                    player_board_update()
+                else:
+                    target()
+                    player_board_update()
+
+                if "TRUE" not in sunk_player_carrier[0]:
+                    hit_player_carrier()
+                if "TRUE" not in sunk_player_battleship[0]:
+                    hit_player_battleship()
+                if "TRUE" not in sunk_player_cruiser[0]:
+                    hit_player_cruiser()
+                if "TRUE" not in sunk_player_submarine[0]:
+                    hit_player_submarine()
+                if "TRUE" not in sunk_player_destroyer[0]:
+                    hit_player_destroyer()
+
+                lose_check()
+
+
+computer_choose()
